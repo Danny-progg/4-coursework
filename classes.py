@@ -1,6 +1,5 @@
 import json
 from abc import abstractmethod, ABC
-from pprint import pprint
 from exceptions import ParsingError
 import requests
 
@@ -93,7 +92,7 @@ class SuperJob(Engine):
             "archived": False,
         }
         self.headers = {
-            "__": "__"
+            "X-Api-App-Id": "v3.r.137642286.11b2ee902c008375d3ec25112e66c43c418b7df7.ff2c120070a2dc5e91070a41194ace6f6d0481cd"
         }
         self.vacancies = []
 
@@ -126,6 +125,7 @@ class SuperJob(Engine):
 
         return formatted_vacancies
 
+
 def get_vacancies(self, pages_count=2):
         self.vacancies = []
         for page in range(pages_count):
@@ -142,6 +142,7 @@ def get_vacancies(self, pages_count=2):
                 print(f"Загружено вакансий: {len(page_vacancies)}")
             if len(page_vacancies) == 0:
                 break
+
 
 class Connector:
     def __init__(self, keyword, vacancies_json):
