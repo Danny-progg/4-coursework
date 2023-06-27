@@ -1,16 +1,32 @@
-# This is a sample Python script.
-
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
+from classes import HeadHunter, SuperJob, Connector
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press ⌘F8 to toggle the breakpoint.
+def main():
+    vacancies_json = []
+    #kellyword = input("Введите ключевое слово для поиска: ")
+    keyword = "Python"
 
+    hh = HeadHunter(keyword)
+    sj = SuperJob(keyword)
+    for api in (hh, sj):
+        api.get_vacancies(pages_count=10)
+        vacancies_json.extend(api.get_formatted_vacancies())
 
-# Press the green button in the gutter to run the script.
-if __name__ == '__main__':
-    print_hi('PyCharm')
+    connector = Connector(keyword=keyword, vacancies_json=vacancies_json)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    while True:
+        command = input(
+            "1 - Вывести список вакансий;\n"
+            "2 - Отсортировать по минимальной зарплате;\n"
+            "exit - для выхода.\n"
+            ">>> "
+        )
+        if command.lower() == 'exit':
+            break
+        elif command == "1":
+            vacancies = connector.select()
+        elif command == "2":
+            vacancies = connector.sort_by_salary_from()
+
+        for vacancy in vacancies:
+            print(vacancy, end='\n')
