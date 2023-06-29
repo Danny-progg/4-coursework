@@ -126,7 +126,7 @@ class SuperJob(Engine):
         return formatted_vacancies
 
 
-def get_vacancies(self, pages_count=2):
+    def get_vacancies(self, pages_count=2):
         self.vacancies = []
         for page in range(pages_count):
             page_vacancies = []
@@ -143,6 +143,12 @@ def get_vacancies(self, pages_count=2):
             if len(page_vacancies) == 0:
                 break
 
+    def get_request(self):
+
+        response = requests.get(self.url, headers=self.headers, params=self.params)
+        if response.status_code != 200:
+            raise ParsingError(f"{response.status_code}")
+        return response.json()["items"]
 
 class Connector:
     def __init__(self, keyword, vacancies_json):
