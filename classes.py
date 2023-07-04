@@ -134,7 +134,7 @@ class SuperJob(Engine):
             print(f"({self.__class__.__name__}) Парсинг страницы {page} -", end=" ")
             from exceptions import ParsingError
             try:
-                page_vacancies = self.get_request()
+                page_vacancies = self.get_request
             except ParsingError as error:
                 print(error)
             else:
@@ -143,12 +143,14 @@ class SuperJob(Engine):
             if len(page_vacancies) == 0:
                 break
 
+    @property
     def get_request(self):
 
         response = requests.get(self.url, headers=self.headers, params=self.params)
         if response.status_code != 200:
             raise ParsingError(f"{response.status_code}")
-        return response.json()["items"]
+        return response.json()["objects"]
+
 
 class Connector:
     def __init__(self, keyword, vacancies_json):
@@ -182,7 +184,6 @@ class Vacancy:
         self.salary_from = vacancy["salary_from"]
         self.salary_to = vacancy["salary_to"]
         self.currency = vacancy["currency"]
-        self.currency_value = vacancy["currency_value"]
 
     def __str__(self):
         if not self.salary_from and not self.salary_to:
@@ -192,11 +193,11 @@ class Vacancy:
             if self.salary_from:
                 salary_from = f"от { self.salary_from } { self.salary_to }"
                 if self.currency != "RUR":
-                    salary_from += f" ({ round(self.salary_from * self.currency_value, 2) } RUR)"
+                    salary_from += f" ({ round(self.salary_from * 2, 2) } RUR)"
             if self.salary_to:
                 salary_to = f"до { self.salary_to } { self.currency }"
                 if self.currency != "RUR":
-                    salary_to += f" ({round(self.salary_to * self.currency_value, 2)} RUR)"
+                    salary_to += f" ({round(self.salary_to * 2, 2)} RUR)"
             salary = " ".join([salary_from, salary_to]).strip()
         return f"""
 Работодатель: \"{ self.employer }\"
